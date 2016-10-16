@@ -1,5 +1,10 @@
 package net.wxc.lang.utils;
 
+/**
+ * 系统属性枚举类
+ * @author Cheng
+ *
+ */
 public enum SystemPropertiesKeys {
 	
 	JAVA_RUNTIME_NAME("java.runtime.name"),
