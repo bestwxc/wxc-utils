@@ -1,0 +1,52 @@
+1.Base64
+	编码 encodeBase64:
+		byte   			待编码的字节数据
+		isChunked		结果是否分块，每76个字符插入一个'/r/n'
+		isUrlSafe		是否生成url方式，使用‘-’‘—’代替‘+’‘/’，并去掉末尾补全的等号（结果必为4的倍数）
+		maxResultSize	最大结果大小
+		返回结果为字节数据或者字符串
+	解码 decode，可以解码成字符串，字节或者bigint
+
+2.Base64InputStream(//此段错误：用于编码将出现错误，默认缓存4096，非三的倍数//)
+	构造函数：public Base64InputStream(final InputStream in, final boolean doEncode,
+                             final int lineLength, final byte[] lineSeparator)
+    	in				输入流
+    	doEncode		是否编码，默认为解码false
+    	lineLength		每行长度，默认76
+    	lineSeparator	换行符，默认为\r\n
+   	将文件写成Base64文件代码示例(Base64打开后可以阅读)：
+	   	File baseFile = new File(Class.class.getResource("/").getFile());
+		File pic = new File(baseFile,"img1.jpg");
+		File txt = new File(baseFile,"abc.txt");
+		InputStream is = new Base64InputStream(new FileInputStream(pic),true);
+		OutputStream os = new FileOutputStream(txt);
+		byte[] b = new byte[1024];
+		int n = 0;
+		while((n = is.read(b)) > 0){
+			os.write(b, 0, n);
+		}
+		os.flush();
+		os.close();
+		is.close();
+   	
+3.Base64OutputStream
+	构造函数：public Base64OutputStream(final OutputStream out, final boolean doEncode,
+                              final int lineLength, final byte[] lineSeparator)
+        out				输出流
+    	doEncode		是否编码，默认为编码true
+    	lineLength		每行长度，默认76
+    	lineSeparator	换行符，默认为\r\n
+            将文件写成Base64文件代码示例(Base64打开后可以阅读)：
+	   	File baseFile = new File(Class.class.getResource("/").getFile());
+		File txt = new File(baseFile,"abc.txt");
+		File pic = new File(baseFile,"img3.jpg");
+		InputStream is = new Base64InputStream(new FileInputStream(txt));
+		OutputStream os = new FileOutputStream(pic);
+		byte[] b = new byte[1024];
+		int n = 0;
+		while((n = is.read(b)) > 0){
+			os.write(b,0,n);	//写入读取的字节数n,如果使用write(b)的形式，则会将b中多余的字节写入，造成错误
+		}
+		os.flush();
+		os.close();
+		is.close();
