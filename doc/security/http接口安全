@@ -1,0 +1,10 @@
+一种Http接口签名方式
+1.在http调用请求头信息中增加
+	a.x-access-id:客户标识     最大16byte
+	b.x-signature:签名内容     256byte
+2.签名方式：
+	AccessKey	Hex(MD5(Http Body)) 	Unix timestamp 		随机数		自定义内容
+	32byte		32byte					4byte				8byte	<=41byte
+	签名内容<=117byte
+	使用1024bit密钥
+	使用RSA_PKCS1_PADDING填充的RSA加密
