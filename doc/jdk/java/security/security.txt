@@ -1,0 +1,15 @@
+java。security
+1.访问控制
+2.加解密
+
+加解密
+	添加加解密解决方案
+	Security.addProvider(new BouncyCastleProvider());
+	
+	MessageDigest,消息摘要
+	//SHA-256 SHA-512 SHA SHA-384 MD5 MD2
+	MessageDigest md = MessageDigest.getInstance("SHA-512");
+	byte[] b = "abc".getBytes();
+	byte[] c = md5.digest(b);
+	
+	
