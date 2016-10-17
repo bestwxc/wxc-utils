@@ -1,3 +1,4 @@
+支持Base64,md5,sha256,binary,hex
 1.Base64
 	编码 encodeBase64:
 		byte   			待编码的字节数据
@@ -7,7 +8,7 @@
 		返回结果为字节数据或者字符串
 	解码 decode，可以解码成字符串，字节或者bigint
 
-2.Base64InputStream(//此段错误：用于编码将出现错误，默认缓存4096，非三的倍数//)
+2.Base64InputStream
 	构造函数：public Base64InputStream(final InputStream in, final boolean doEncode,
                              final int lineLength, final byte[] lineSeparator)
     	in				输入流
@@ -50,3 +51,13 @@
 		os.flush();
 		os.close();
 		is.close();
+		
+4.BinaryCodec 将byte转换成‘0’‘1’的字节数组、字符数组或字符串
+
+5.Hex	将byte转换成十六进制显示的字符串,char数组用两个表示一个字节
+
+6.DigestUtils 计算sha,md5等摘要值，结果可以为字节数组，也可以为十六进制显示的字符串
+
+7.URLCodec 	用于编码url中的非西欧字母
+	URLCodec.encodeUrl(null, sb)  		编码
+	URLCodec.decodeUrl(tb);				解码
