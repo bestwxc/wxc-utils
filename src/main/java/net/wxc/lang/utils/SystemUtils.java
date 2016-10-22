@@ -1,7 +1,7 @@
 package net.wxc.lang.utils;
 
 /**
- * ÏµÍ³¹¤¾ßÀà
+ * ç³»ç»Ÿå·¥å…·ç±»
  * @author Cheng
  *
  */
