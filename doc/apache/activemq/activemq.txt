@@ -1,0 +1,17 @@
+ActiveMQ5.14.1
+maven:
+<dependency>
+  <groupId>org.apache.activemq</groupId>
+  <artifactId>activemq-all</artifactId>
+  <version>5.14.1</version>
+</dependency>
+安装要求：JDK>1.7 JAVA_HOME
+	Win:解压后，进入目录，执行bin\activemq start启动 
+	使用默认配置conf/activemq.xml
+	使用其它配置启动	bin/activemq console xbean:conf/activemq-demo.xml
+	后台启动	bin/activemq start xbean:conf/activemq-demo.xml
+	
+	默认端口61616，netstat -an|find "61616" 查看（netstat -an|grep 61616）
+	WEB监控：http://localhost:8161/admin   admin/admin
+		可以使用JMS支持监控MQ运行状态
+	

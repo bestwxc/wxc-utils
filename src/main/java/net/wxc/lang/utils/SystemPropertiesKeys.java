@@ -1,7 +1,7 @@
 package net.wxc.lang.utils;
 
 /**
- * 系统属性枚举类
+ * 绯荤粺灞炴�ф灇涓剧被
  * @author Cheng
  *
  */

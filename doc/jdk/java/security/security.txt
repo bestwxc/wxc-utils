@@ -1,15 +1,54 @@
-java��security
-1.���ʿ���
-2.�ӽ���
+java。security
+1.访问控制
+2.加解密
 
-�ӽ���
-	���Ӽӽ��ܽ������
+加解密
+	添加加解密解决方案
 	Security.addProvider(new BouncyCastleProvider());
 	
-	MessageDigest,��ϢժҪ
+	MessageDigest,消息摘要
 	//SHA-256 SHA-512 SHA SHA-384 MD5 MD2
 	MessageDigest md = MessageDigest.getInstance("SHA-512");
 	byte[] b = "abc".getBytes();
 	byte[] c = md5.digest(b);
 	
+	RSA密钥生成、
+	//密钥生成，常用密钥保存格式ssh-rsa 标准格式  pem 证书形式
+	KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+	keyPairGenerator.initialize(1024);
+	KeyPair keyPair = keyPairGenerator.generateKeyPair();
+	PublicKey publicKey = keyPair.getPublic();
+	PrivateKey privateKey = keyPair.getPrivate();
+	//读取PublicKey
+	首先将key读取成byte数组（一般从Base64或者hex形式转换而来）
+	KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+	//私钥
+	KeySpec keySpec = new PKCS8EncodedKeySpec(b);
+	//公钥
+	KeySpec keySpec = new X509EncodedKeySpec(b)
+	//生成密钥
+	PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+	PublicKey publicKey = keyFactory.generatePublic(keySpec);
 	
+	RSA签名和验签
+	//使用私钥对数据data进行签名得到sign
+	//签名方式MD5WITHRSA,另有：NONEWITHRSA, MD2WITHRSA, SHA1WITHRSA, NONEWITHDSA, MD5ANDSHA1WITHRSA, MD5WITHRSA, SHA384WITHRSA, SHA256WITHRSA, SHA1WITHDSA, SHA512WITHRSA
+	Signature signature = Signature.getInstance("MD5WITHRSA");
+	signature.initSign(privateKey);
+	signature.update(data);
+	byte[] sign = signature.sign();
+	//使用公钥和sign验证data有效性
+	signature.initVerify(publicKey);
+	signature.update(data);
+	signature.verify(sign);
+	
+	RSA加密和解密
+	Cipher cipher = Cipher.getInstance("RSA");
+	//Cipher.ENCRYPT_MODE 加密模式 Cipher.DECRYPT_MODE:解密模式 可以使用公钥和私钥
+	cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+	out = cipher.doFinal(data);
+	
+	RSA加密NoPPadding，OAEPPadding，PKCS1Padding
+	RSA能对key长度的明文加密，当明文对小与key长度数据加密时，需要进行填充，填充的0会影响二进制数据的定义
+	“定长定量自己可控可理解”的加密不需要padding
+	PKCS1Padding的padding占用11字节(1024/8-11=117,512/8-11=53,2048/8-11=245)

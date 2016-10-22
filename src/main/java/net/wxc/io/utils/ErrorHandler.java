@@ -4,10 +4,10 @@ import java.io.File;
 
 /**
  * @author Cheng
- * ´íÎó´¦ÀíÆ÷
+ * é”™è¯¯å¤„ç†å™¨
  */
 public class ErrorHandler {
 	public void handleOnDeleteError(File f){
-		throw new RuntimeException("É¾³ıÎÄ¼şÊ±·¢Éú´íÎó£¬ÎÄ¼şÎª£º" + f.getAbsolutePath());
+		throw new RuntimeException("åˆ é™¤æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ï¼Œæ–‡ä»¶ä¸ºï¼š" + f.getAbsolutePath());
 	}
 }

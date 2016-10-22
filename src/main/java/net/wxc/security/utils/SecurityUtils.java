@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class SecurityUtils {
 	/**
-	 * ÁĞ³öËùÓĞjava°²È«¿ò¼ÜÖ§³ÖµÄ·şÎñ
+	 * åˆ—å‡ºæ‰€æœ‰javaå®‰å…¨æ¡†æ¶æ”¯æŒçš„æœåŠ¡
 	 */
 	public static void listService(){
 		//Map<String,String> map = new HashMap<String,String>();
@@ -25,7 +25,7 @@ public class SecurityUtils {
 	}
 	
 	public static void listProvider(){
-		System.out.println("-------ÁĞ³ö¼ÓÃÜ·şÎñÌá¹©Õß-----");
+		System.out.println("-------åˆ—å‡ºåŠ å¯†æœåŠ¡æä¾›è€…-----");
 		Provider[] provider = Security.getProviders();
 		for(Provider p : provider){
 			System.out.println("Provider:"+p.getName()+" - version:"+p.getVersion());

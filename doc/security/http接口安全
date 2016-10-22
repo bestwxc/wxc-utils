@@ -1,10 +1,10 @@
-Ò»ÖÖHttp½Ó¿ÚÇ©Ãû·½Ê½
-1.ÔÚhttpµ÷ÓÃÇëÇóÍ·ĞÅÏ¢ÖĞÔö¼Ó
-	a.x-access-id:¿Í»§±êÊ¶     ×î´ó16byte
-	b.x-signature:Ç©ÃûÄÚÈİ     256byte
-2.Ç©Ãû·½Ê½£º
-	AccessKey	Hex(MD5(Http Body)) 	Unix timestamp 		Ëæ»úÊı		×Ô¶¨ÒåÄÚÈİ
+ä¸€ç§Httpæ¥å£ç­¾åæ–¹å¼
+1.åœ¨httpè°ƒç”¨è¯·æ±‚å¤´ä¿¡æ¯ä¸­å¢åŠ 
+	a.x-access-id:å®¢æˆ·æ ‡è¯†     æœ€å¤§16byte
+	b.x-signature:ç­¾åå†…å®¹     256byte
+2.ç­¾åæ–¹å¼ï¼š
+	AccessKey	Hex(MD5(Http Body)) 	Unix timestamp 		éšæœºæ•°		è‡ªå®šä¹‰å†…å®¹
 	32byte		32byte					4byte				8byte	<=41byte
-	Ç©ÃûÄÚÈİ<=117byte
-	Ê¹ÓÃ1024bitÃÜÔ¿
-	Ê¹ÓÃRSA_PKCS1_PADDINGÌî³äµÄRSA¼ÓÃÜ
+	ç­¾åå†…å®¹<=117byte
+	ä½¿ç”¨1024bitå¯†é’¥
+	ä½¿ç”¨RSA_PKCS1_PADDINGå¡«å……çš„RSAåŠ å¯†

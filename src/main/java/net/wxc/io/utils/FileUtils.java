@@ -3,21 +3,21 @@ package net.wxc.io.utils;
 import java.io.File;
 
 /**
- * ÎÄ¼þ¹¤¾ßÀà
+ * æ–‡ä»¶å·¥å…·ç±»
  * @author Cheng
  * 
  */
 public class FileUtils {
 	
 	/**
-	 * É¾³ýÄ¿Â¼
+	 * åˆ é™¤ç›®å½•
 	 * @param f
 	 */
 	public static void rmdirs(File f){
 		rmdirs(f,null);
 	}
 	/**
-	 * É¾³ýÄ¿Â¼
+	 * åˆ é™¤ç›®å½•
 	 * @param f
 	 * @param handler
 	 */
