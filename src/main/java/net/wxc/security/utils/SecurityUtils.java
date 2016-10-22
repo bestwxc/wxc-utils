@@ -24,6 +24,9 @@ public class SecurityUtils {
 		}
 	}
 	
+	/**
+	 * 列出所有的Provider
+	 */
 	public static void listProvider(){
 		System.out.println("-------列出加密服务提供者-----");
 		Provider[] provider = Security.getProviders();
@@ -32,9 +35,5 @@ public class SecurityUtils {
 			System.out.println(p.getInfo());
 			System.out.println("");
 		}
-	}
-	public static void main(String[] args) {
-		listProvider();
-		listService();
 	}
 }
