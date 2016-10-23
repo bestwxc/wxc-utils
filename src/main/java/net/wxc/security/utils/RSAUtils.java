@@ -27,24 +27,34 @@ public class RSAUtils {
 		
 	}
 	
-	public RSAUtils(PublicKey publicKey){
+	public RSAUtils(int length){
+		this.setKeyByte(length);
+	}
+	
+	public RSAUtils(PublicKey publicKey,int length){
+		this.setKeyByte(length);
 		//int keyByte = new X509EncodedKeySpec(publicKey.getEncoded()).
 		this.publicKey = publicKey;
 	}
 	
-	public RSAUtils(PrivateKey privateKey){
+	public RSAUtils(PrivateKey privateKey,int length){
+		this.setKeyByte(length);
 		this.privateKey = privateKey;
 	}
 	
-	public RSAUtils(PublicKey publicKey,PrivateKey privateKey){
+	public RSAUtils(PublicKey publicKey,PrivateKey privateKey,int length){
+		this.setKeyByte(length);
 		this.publicKey = publicKey;
 		this.privateKey = privateKey;
 	}
 	
-	private void setKeyByte(Key key){
-		int keyByte =  (int) Math.round(key.getEncoded().length/8.0);
-		this.MAX_DECODE_BYTE = keyByte;
-		this.MAX_ENCODE_BYTE = keyByte - 11;
+	public void setKeyByte(int length){
+		//int keyByte =  8 * (int) Math.round(key.getEncoded().length/8.0);
+		
+		//int keyByte = (int) Math.pow(2, Math.round(Math.log(key.getEncoded().length)/(Math.log(10.0))));
+		//int keyByte = Integer.parseInt("");
+		this.MAX_DECODE_BYTE = length/8;
+		this.MAX_ENCODE_BYTE = length/8 - 11;
 	}
 	
 	public PublicKey getPublicKey() {
@@ -65,7 +75,7 @@ public class RSAUtils {
 
 	public void initPublicKeyEncode(){
 		try {
-			this.setKeyByte(publicKey);
+			//this.setKeyByte(publicKey);
 			publicKeyEncodeCipher = Cipher.getInstance("RSA");
 			publicKeyEncodeCipher.init(Cipher.ENCRYPT_MODE, publicKey);
 		} catch (Exception e) {
@@ -76,7 +86,7 @@ public class RSAUtils {
 	
 	public void initPublicKeyDecode(){
 		try {
-			this.setKeyByte(publicKey);
+			//this.setKeyByte(publicKey);
 			publicKeyDecodeCipher = Cipher.getInstance("RSA");
 			publicKeyDecodeCipher.init(Cipher.DECRYPT_MODE, publicKey);
 		} catch (Exception e) {
@@ -87,7 +97,7 @@ public class RSAUtils {
 	
 	public void initPrivateKeyEncode(){
 		try {
-			this.setKeyByte(privateKey);
+			//this.setKeyByte(privateKey);
 			privateKeyEncodeCipher = Cipher.getInstance("RSA");
 			privateKeyEncodeCipher.init(Cipher.ENCRYPT_MODE, privateKey);
 		} catch (Exception e) {
@@ -98,7 +108,7 @@ public class RSAUtils {
 	
 	public void initPrivateKeyDecode(){
 		try {
-			this.setKeyByte(privateKey);
+			//this.setKeyByte(privateKey);
 			privateKeyDecodeCipher = Cipher.getInstance("RSA");
 			privateKeyDecodeCipher.init(Cipher.DECRYPT_MODE, privateKey);
 		} catch (Exception e) {
