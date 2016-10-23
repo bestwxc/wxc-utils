@@ -52,3 +52,19 @@ java。security
 	RSA能对key长度的明文加密，当明文对小与key长度数据加密时，需要进行填充，填充的0会影响二进制数据的定义
 	“定长定量自己可控可理解”的加密不需要padding
 	PKCS1Padding的padding占用11字节(1024/8-11=117,512/8-11=53,2048/8-11=245)
+	
+	AES对称加密
+	AES支持128，192，256bit的密钥
+	java国内默认只支持128位，超过密钥长度则报错误Illegal key size or default parameters
+	原因是美国的出口限制，Sun通过权限文件（local_policy.jar、US_export_policy.jar）做了相应限制
+	可在oracle下载 无政策限制权限文件（Unlimited Strength Jurisdiction Policy Files）并替换即可
+	替换安装目录jre\lib\securitylocal_policy.jar 和 US_export_policy.jar
+	//编码方式 对data进行加密得到out
+	KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+	keyGenerator.init(128);
+	SecretKey key = keyGenerator.generateKey();
+	Cipher cipher = Cipher.getInstance("AES");
+	cipher.init(Cipher.ENCRYPT_MODE, key);
+	byte[] out = cipher.doFinal();
+	
+	
