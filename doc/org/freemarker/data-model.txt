@@ -1,0 +1,54 @@
+1.Scalars 简单量（纯量）
+	Boolean，Number,String,Date-like
+	TemplateDateModel,TemplateScalarModel,TemplateBooleanModel,TemplateNumberModel
+	实现类在freemarker.template下面，SimpleBoolean,SimpleNumber,SimpleDate,SimpleScalar
+	简单量不可改变，当你在模版中设置了简单量，再用另一个简单量示例替换时，模版中的简单量不会改变
+	
+	处理Date
+	java用Date表示Date,Time,DateTime 而数据库通常具有不同的类型
+	于是，TemplateDateModel中具有两个方法getAsDate()和getDateType()，其中DateType用数字表示 
+2.Containers 容器
+	hashes, sequences, and collections.
+	Hashes：
+		TemplateHashModel 
+		TemplateHashModelEx 继承前者，为增强接口
+		SimpleHash为实现类
+		Hash不可以改变。不可以增改内部
+	Sequences：
+		TemplateSequenceModel
+		SimpleSequence
+	collections：
+		TemplateCollectionModel 
+		SimpleCollection
+3.Method
+	TemplateMethodModel 
+	包含一个方法TemplateModel exec(java.util.List arguments)
+	TemplateMethodModelEx 继承TemplateMethodModel，方法相同，表明参数List中直接放入模版实体类，而不是字符串
+	实现方法后，将方法对象放入root，就可以在模版中引用方法
+	root.put("indexOf", new IndexOfMethod());
+	在模版中：
+	<#assign x = "something">
+	${indexOf("met", x)}
+	${indexOf("foo", x)}
+4.Directives 指令
+	TemplateDirectiveModel：freemarker2.3.11中引用，用于代替不赞成使用的TemplateTransformModel
+	实现指令，然后将指令对象放入root。
+	root.put("upper", new com.example.UpperDirective());
+	也可以在模版类中引入
+	<#-- Maybe you have directives that you have implemented in FTL -->
+	<#macro something>
+	  ...
+	</#macro>
+	<#-- Now you can't use <#macro upper>, but instead you can: -->
+	<#assign upper = "com.example.UpperDirective"?new()>
+	指令不应该有状态，指令的嵌套调用或者多线程下会出错。
+	TemplateDirectiveModel不支持通过位置传参。（计划在2.4中解决）
+5.Node variables 节点变量
+	TemplateNodeModel 
+	getChildNodes()和getParentNode()
+6.Object wrappers 对象包装
+	freemarker.template.ObjectWrapper
+	ObjectWrapperAndUnwrapper
+	实现类freemarker.template.DefaultObjectWrapper
+	
+		
