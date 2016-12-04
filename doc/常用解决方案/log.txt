@@ -1,0 +1,32 @@
+slf4j和common-logging(jcl)
+	两者同为日志通用接口，提供简单日志实现，可以支持切换日志实现
+	其中：common-logging运行时动态检测日志实现
+	slf4j在加载时静态注册日志实现，
+	一般认为slf4j性能比common-loggin好
+log4j通用日志实现
+logback,主要作者与log4j相同，为后续作品，
+log4j 2 在logback后，性能应该与logback相近。
+
+综上，可以使用slf4j+log4j2作为日志框架
+maven:
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.7</version>
+		</dependency>
+slf4j-api,slf4j-log4j12,log4j-core,此外还需要log4j.propertity
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+private static Logger log = LoggerFactory.getLogger(Slf4jDemo.class);
+或者 private static Logger log = LoggerFactory.getLogger("abc");

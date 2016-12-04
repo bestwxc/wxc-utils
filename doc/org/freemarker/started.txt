@@ -1,0 +1,19 @@
+1.实例化freemarker.template.Configuration
+	Configuration cfg = new Configuration(Configuration.VERSION_2_3_25);
+	cfg.setDirectoryForTemplateLoading(new File("template"));
+	cfg.setDefaultEncoding("UTF-8");
+	cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+	cfg.setLogTemplateExceptions(false);
+	注意：Configuration应为应用程序级别单例
+2.创建数据模型
+	Map<String,Object> root = new HashMap<String,Object>();
+3.获取模版
+	Template temp = cfg.getTemplate("test.ftlh");
+4.使用模版输入结果
+	Writer out = new OutputStreamWriter(System.out);
+	temp.process(root,out);
+	
+总结：
+	初始化Configuration对象，设置freemarker参数，通过Configuration和模版文件获得Template对象，
+	Template对象处理实体并将结果写入指定的输出流
+	
