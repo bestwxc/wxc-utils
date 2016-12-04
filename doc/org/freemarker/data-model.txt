@@ -1,3 +1,4 @@
+http://freemarker.org/docs/pgui_datamodel.html
 1.Scalars 简单量（纯量）
 	Boolean，Number,String,Date-like
 	TemplateDateModel,TemplateScalarModel,TemplateBooleanModel,TemplateNumberModel

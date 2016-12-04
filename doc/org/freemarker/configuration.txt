@@ -1,0 +1,52 @@
+http://freemarker.org/docs/pgui_config.html
+1.Configuration  单例
+	getTemplate 生成 Template
+2.共享变量
+	Configuration cfg = new Configuration(Configuration.VERSION_2_3_25);
+	...
+	cfg.setSharedVariable("warp", new WarpDirective());
+	cfg.setSharedVariable("company", "Foo Inc.");
+	不能将非线程安全对象用作共享变量
+	默认用户定义指令（使用@而不是使用#）：
+		name				class
+		capture_output		freemarker.template.utility.CaptureOutput
+		compress			freemarker.template.utility.StandardCompress
+		html_escape			freemarker.template.utility.HtmlEscape
+		normalize_newlines	freemarker.template.utility.NormalizeNewlines
+		xml_escape			freemarker.template.utility.XmlEscape
+3.配置参数
+	Configuration级别
+	Template 级别
+	Environment 级别：
+	Java API:
+		Environment env = myTemplate.createProcessingEnvironment(root, out);
+		env.setLocale(java.util.Locale.ITALY);
+		env.setNumberFormat("0.####");
+		env.process();
+	在模版中使用setting指令
+		<#setting locale="it_IT">
+		<#setting number_format="0.####">
+4.模版加载
+	模版加载
+		文件路径加载：void setDirectoryForTemplateLoading(File dir)
+		类路径加载：void setClassForTemplateLoading(Class cl, String basePackagePath)
+		Web应用上下文加载：void setServletContextForTemplateLoading(Object servletContext, String path)
+	自定义加载器：
+		实现TemplateLoader
+		cfg.setTemplateLoader(templateLoader);
+	从多个位置加载模版
+		import freemarker.cache.*; // template loaders live in this package
+		...
+		FileTemplateLoader ftl1 = new FileTemplateLoader(new File("/tmp/templates"));
+		FileTemplateLoader ftl2 = new FileTemplateLoader(new File("/usr/data/templates"));
+		ClassTemplateLoader ctl = new ClassTemplateLoader(getClass(), "/com/example/templates");
+		MultiTemplateLoader mtl = new MultiTemplateLoader(new TemplateLoader[] { ftl1, ftl2, ctl });
+		cfg.setTemplateLoader(mtl);
+	从其它资源加载模版：实现加载器
+	模版表示（类url标识）
+	模版缓存
+		Configuration会缓存模版，第二次调用时直接返回Template对象，而不会重新解析模版文件
+		update delay 配置缓存时间
+		freemarker无法感知类路径模版的修改
+		Configuration.clearTemplateCache清楚缓存（当内存过大时，可能会清楚模版）
+		cache_storage 缓存策略，可以修改
