@@ -1,0 +1,169 @@
+http://freemarker.org/docs/pgui_misc.html
+1.变量及作用范围
+	当调用Template.process时，会创建一个Environment对象来使用直到调用结束。存储变量指令等
+	变量查找顺序，查找到则返回结果
+		Environment
+		data-model
+		Configuration
+2.字符集问题
+	FreeMarker以及Java大多数情况使用UNICODE(UTF16)
+	输入字符集：
+		使用encoding setting设置字符集,该设置仅在调用Configuration.getTemplate获取模版时有效(include指令内部调用该方法)。
+		encoding setting 定义在configuration级别。
+		可以在模版中设置字符集：  <#ftl encoding="utf-8">
+	输出字符集：
+		output_encoding 和url built-in 在freemarker2.3.1才被引入
+		原则上，由于输出Writer由应用软件生成并控制，freemarker不处理输出字符集
+		在应用程序中设置输出字符集（推荐utf8）
+		单独设置输出字符集：
+			Writer w = new OutputStreamWriter(out, outputCharset);
+			Environment env = template.createProcessingEnvironment(dataModel, w);
+			env.setOutputEncoding(outputCharset);
+			env.process();
+3.多线程
+	在多线程环境中，Configuration，Template和数据模型应当当作只读处理，这样可以避免昂贵的同步开销。
+	当使用Configuration.getTemplate获取模版时，获取到的对象可能来自cache,所以不要调用模版实例的set方法
+	不推荐在模型中定义方法修改模型状态。可以使用存在environment对象中的变量来代替，从而在多线程下正常工作。
+4.Bean包装
+	不推荐直接使用BeansWrapper，使用它的子类DefaultObjectWrapper代替，模型清晰，处理更快
+	当下列情形时，会希望使用BeansWrapper而不是DefaultObjectWrapper
+		模版处理期间，需要修改模型中的Map或者Collection;
+		当array, Collection和Map对象被传递到wrapper方法后需要保留;
+		If the Java API of the earlier listed classes (String, Map, List ...etc) should be visible for the templates;
+	未写完
+5.日志
+	简单说，推荐添加org.slf4j:log4j-over-slf4j使用slf4j,并确保不存在log4j:log4j.从2.4开始。不需要log4j-over-slf4j
+	如果在意细节或者不能够使用slf4j,继续阅读文档。（暂时忽略）
+6.在servlet中使用freemarker
+	根本上说，在web应用中使用freemarker与其它情况没有什么不同。freemarker将输Template.process方法传入的Writer，而不管Writer将输出写入console,file甚至是HttpServletResponse输出流中。Freemarker不关心servlet或者web，仅仅是将java对象和模版合并并通过她们生成文本输出。从这点说，由你决定怎么构建web应用。
+	但是，你可能希望在某些已有的Web应用框架中使用freemarker.许多框架基于Model2架构(jsp做表现层)，比如struts2。该类框架使用如下，其它框架请阅读框架文档。
+	在model2架构中使用freemarker
+		model 2架构：框架将数据放入ServletContext, HttpSession和HttpServletRequest然后将请求转发到用户定义的action类，处理完成后，框架将请求forwarded到jsp页面。
+		model架构中可以使用ftl文件代替jsp页面，由于容器不支持ftl文件，所以需要一些额外的配置
+			1.复制freemarker.jar到WEB-INF/lib
+			2.编辑web.xml
+				<servlet>
+				  <servlet-name>freemarker</servlet-name>
+				  <servlet-class>freemarker.ext.servlet.FreemarkerServlet</servlet-class>
+				  <!--
+				    Init-param documentation:
+				    http://freemarker.org/docs/api/freemarker/ext/servlet/FreemarkerServlet.html
+				  -->
+				  <!-- FreemarkerServlet settings: -->
+				  <init-param>
+				    <param-name>TemplatePath</param-name>
+				    <param-value>/</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>NoCache</param-name>
+				    <param-value>true</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>ResponseCharacterEncoding</param-name>
+				    <!-- Use the output_encoding setting of FreeMarker: -->
+				    <param-value>fromTemplate</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>ExceptionOnMissingTemplate</param-name>
+				    <!-- true => HTTP 500 on missing template, instead of HTTP 404. -->
+				    <param-value>true</param-value>
+				  </init-param>
+				  <!-- FreeMarker engine settings: -->
+				  <init-param>
+				    <param-name>incompatible_improvements</param-name>
+				    <param-value>2.3.25</param-value>
+				    <!--
+				      Recommended to set to a high value.
+				      See: http://freemarker.org/docs/pgui_config_incompatible_improvements.html
+				    -->
+				  </init-param>
+				  <init-param>
+				    <param-name>template_exception_handler</param-name>
+				    <!-- Use "html_debug" during development! -->
+				    <param-value>rethrow</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>template_update_delay</param-name>
+				    <!-- Use 0 during development! Consider what value you need otherwise. -->
+				    <param-value>30 s</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>default_encoding</param-name>
+				    <!-- The encoding of the template files: -->
+				    <param-value>UTF-8</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>output_encoding</param-name>
+				    <!-- The encoding of the template output; Note that you must set
+				         "ResponseCharacterEncodring" to "fromTemplate" for this to work! -->
+				    <param-value>UTF-8</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>locale</param-name>
+				    <!-- Influences number and date/time formatting, etc. -->
+				    <param-value>en_US</param-value>
+				  </init-param>
+				  <init-param>
+				    <param-name>number_format</param-name>
+				    <param-value>0.##########</param-value>
+				  </init-param>
+				  <load-on-startup>1</load-on-startup>
+				</servlet>
+				<servlet-mapping>
+				  <servlet-name>freemarker</servlet-name>
+				  <url-pattern>*.ftl</url-pattern>
+				  <!-- HTML and XML auto-escaped if incompatible_improvements >= 2.3.24: -->
+				  <url-pattern>*.ftlh</url-pattern>
+				  <url-pattern>*.ftlx</url-pattern>
+				</servlet-mapping>				
+				...
+				<!--
+				  Prevent the visiting of MVC Views from outside the servlet container.
+				  RequestDispatcher.forward/include should, and will still work.
+				  Removing this may open security holes!
+				-->
+				<security-constraint>
+				  <web-resource-collection>
+				    <web-resource-name>FreeMarker MVC Views</web-resource-name>
+				    <url-pattern>*.ftl</url-pattern>
+				    <url-pattern>*.ftlh</url-pattern>
+				    <url-pattern>*.ftlx</url-pattern>
+				  </web-resource-collection>
+				  <auth-constraint>
+				    <!-- Nobody is allowed to visit these directly. -->
+				  </auth-constraint>
+				</security-constraint>
+			3.像使用jsp一样使用ftl(可以定义其它后缀)
+		在freemarker中，<html:form action="/query">...</html:form>是静态文本。使用freemarker指令来使用jsp标签，如：
+			<@html.form action="/query">...</@html.form>
+		在freemarker中用指令使用jsp标签，jsp标签的属性不能使用${...}，应该如下使用：
+			<@my.jspTag color=aVariable name="aStringLiteral" width=100 height=a+b />
+		变量查找顺序：
+			ftl文件->HttpServlet->RequestHttpSession->ServletContext
+	从其它web资源中包含内容：
+		使用<@include_page path="..."/>（FreemarkerServlet提供的自定义指令）
+			<@include_page path="path/to/some.jsp"/>
+			相当于使用<jsp:include page="path/to/some.jsp">
+		<@include_page ...>与<#include ...>不同，后者是包含freemarker模版
+		某些框架提供自由的解决方案，不一定使用FreemarkerServlet，所以include_page可能无效
+		路径可以为相对路径，也可以为绝对路径。
+		可以使用自定义参数，inherit_params
+			<@include_page path="path/to/some.jsp" inherit_params=true params={"foo": "99", "bar": ["a", "b"]}/>
+	在ftl文件中使用jsp自定义标签库
+		暂略
+	在jsp中内嵌ftl
+		使用taglib
+7.配置访问权限
+	在装有security manager的虚拟机中，需要授权来保证正常使用 security policy file
+		grant codeBase "file:/path/to/freemarker.jar"
+		{
+		  permission java.util.PropertyPermission "file.encoding", "read";
+		  permission java.util.PropertyPermission "freemarker.*", "read";
+		}
+	略
+8.Legacy XML wrapper implementation
+	不赞成使用，略
+9.在ant中使用freemarker
+	略
+10.Jython
+	略
